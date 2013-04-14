@@ -1,8 +1,6 @@
 <?php
 
-/**
- * Namespace 
- */
+use src\PharCompiler\Console; 
 
 /**
  * ApplicationTest class extending PHPUnit_Framework_TestCase

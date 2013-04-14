@@ -12,12 +12,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 use \Phar;
 
 class Make extends Command
-{   
+{
+    /**
+     * __construct
+     *
+     * @access public
+     */
     public function __construct()
     {
         parent::__construct();
     }
     
+    /**
+     * configure
+     *
+     * @access protected
+     */
     protected function configure()
     {
         //set the name of the command
@@ -33,6 +43,13 @@ class Make extends Command
 	    );
     }
     
+    /**
+     * execute
+     *
+     * @access protected
+     * @param
+     * @param
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 	$output->writeln("\nThe phar_file name is ..." . $input->getArgument('phar_file'));
@@ -44,6 +61,14 @@ class Make extends Command
         $output->writeln(PHP_EOL . PHP_EOL);
     }
     
+    /**
+     * compress
+     *
+     * @access public
+     * @param
+     * @param
+     * @param
+     */
     public function compress($file, $stub, $root)
     {
 	//check if the phar file is writable
@@ -141,7 +166,9 @@ phar.readonly must be set to 0 within your php.ini in order to run");
     }
     
     /**
+     * is_phar_writable
      *
+     * @access private
      */
     private function is_phar_writable()
     {
@@ -153,7 +180,11 @@ phar.readonly must be set to 0 within your php.ini in order to run");
     }
     
     /**
+     * get_var
      *
+     * @access private
+     * @param
+     * @return
      */
     private function get_var($var)
     {
@@ -171,7 +202,11 @@ phar.readonly must be set to 0 within your php.ini in order to run");
     }
     
     /**
+     * makeAbsolute
      *
+     * @access protected
+     * @param
+     * @return
      */
     protected function makeAbsolute($path = '')
     {
@@ -194,7 +229,10 @@ phar.readonly must be set to 0 within your php.ini in order to run");
     }
     
     /**
+     * execCommand
      *
+     * @access protected
+     * @return
      */
     protected function execCommand()
     {
@@ -220,7 +258,11 @@ phar.readonly must be set to 0 within your php.ini in order to run");
     }
 
     /**
+     * get_last_option
      *
+     * @access protected
+     * @param
+     * @return
      */
     protected function get_last_option($opt)
     {
@@ -233,7 +275,12 @@ phar.readonly must be set to 0 within your php.ini in order to run");
     }
     
     /**
+     * request_option
      *
+     * @access protected
+     * @param
+     * @param
+     * @return
      */
     protected function request_option($no, $name)
     {
@@ -244,7 +291,12 @@ phar.readonly must be set to 0 within your php.ini in order to run");
     }
     
     /**
+     * error
      *
+     * @access protected
+     * @param
+     * @param
+     * @return
      */
     protected function error($message = '', $errno = 1)
     {
@@ -258,7 +310,10 @@ phar.readonly must be set to 0 within your php.ini in order to run");
     }
 
     /**
+     * success
      *
+     * @access protected
+     * @param
      */
     protected function success($message)
     {
@@ -269,7 +324,11 @@ phar.readonly must be set to 0 within your php.ini in order to run");
     }
     
     /**
+     * _scandir
      *
+     * @access private
+     * @param
+     * @return 
      */
     private function _scandir($path)
     {
