@@ -127,7 +127,7 @@ class Make extends Command
 (c) Carlie Hiel <carlie.hiel@gmail.com>
 Jokka is a complete symfony based phar compiling tool.
 Jokka is built with the help of (c) Jeremy Perret's <jeremy@devstar.org> Empir php compiling tool.
-phar.readonly must be set to 0 within your php.ini in order to run");
+");
 	
 	    $phar_copy = $phar.'phar';
 	    @unlink($phar_copy);
