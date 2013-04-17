@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project version="2.0.0a12" title="">
+  <file path="Make.php" hash="83568ee0556e97fb5a0420705862783f" package="Default">
+    <docblock line="3">
+      <description>namespace</description>
+      <long-description></long-description>
+    </docblock>
+    <class final="false" abstract="false" namespace="PharCompiler\Console" line="29" package="PharCompiler\Console;">
+      <extends>\Symfony\Component\Console\Command\Command</extends>
+      <name>Make</name>
+      <full_name>\PharCompiler\Console\Make</full_name>
+      <docblock line="17">
+        <description>Make class extending Command</description>
+        <long-description></long-description>
+        <tag line="17" name="package" description="PharCompiler\Console;"/>
+        <tag line="17" name="author" description="Jeremy Mills"/>
+        <tag line="17" name="author" description="Insu Mun"/>
+        <tag line="17" name="author" description="Carlie Hiel"/>
+        <tag line="17" name="copyright" description="2013"/>
+        <tag line="17" name="version" description="PHP 5.3"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PharCompiler\Console" line="36" package="PharCompiler\Console;">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <docblock line="31">
+          <description>__construct</description>
+          <long-description></long-description>
+          <tag line="31" name="access" description="public"/>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PharCompiler\Console" line="46" package="PharCompiler\Console;">
+        <name>configure</name>
+        <full_name>configure</full_name>
+        <docblock line="41">
+          <description>configure</description>
+          <long-description></long-description>
+          <tag line="41" name="access" description="protected"/>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PharCompiler\Console" line="68" package="PharCompiler\Console;">
+        <name>execute</name>
+        <full_name>execute</full_name>
+        <docblock line="61">
+          <description>execute</description>
+          <long-description></long-description>
+          <tag line="61" name="access" description="protected"/>
+          <tag line="61" name="param" description="The input" type="\Symfony\Component\Console\Input\InputInterface" variable="$input">
+            <type by_reference="false">\Symfony\Component\Console\Input\InputInterface</type>
+          </tag>
+          <tag line="61" name="param" description="The output" type="\Symfony\Component\Console\Output\OutputInterface" variable="$output">
+            <type by_reference="false">\Symfony\Component\Console\Output\OutputInterface</type>
+          </tag>
+        </docblock>
+        <argument line="68">
+          <name>$input</name>
+          <default></default>
+          <type>\Symfony\Component\Console\Input\InputInterface</type>
+        </argument>
+        <argument line="68">
+          <name>$output</name>
+          <default></default>
+          <type>\Symfony\Component\Console\Output\OutputInterface</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="PharCompiler\Console" line="83" package="PharCompiler\Console;">
+        <name>compress</name>
+        <full_name>compress</full_name>
+        <docblock line="75">
+          <description>compress</description>
+          <long-description></long-description>
+          <tag line="75" name="access" description="public"/>
+          <tag line="75" name="param" description="Name of file" type="string" variable="$file">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="75" name="param" description="Name of stub file" type="string" variable="$stub">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="75" name="param" description="Name of root" type="string" variable="$root">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="83">
+          <name>$file</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="83">
+          <name>$stub</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="83">
+          <name>$root</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="PharCompiler\Console" line="162" package="PharCompiler\Console;">
+        <name>is_phar_writable</name>
+        <full_name>is_phar_writable</full_name>
+        <docblock line="157">
+          <description>is_phar_writable</description>
+          <long-description></long-description>
+          <tag line="157" name="access" description="private"/>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="PharCompiler\Console" line="180" package="PharCompiler\Console;">
+        <name>stub_exists</name>
+        <full_name>stub_exists</full_name>
+        <docblock line="171">
+          <description>stub_exists</description>
+          <long-description></long-description>
+          <tag line="171" name="access" description="private"/>
+          <tag line="171" name="param" description="Root path" type="string" variable="$root">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="171" name="param" description="Directory being scanned/root" type="string" variable="$scanned_dir">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="171" name="param" description="File name" type="string" variable="$stub_file">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="171" name="return" description="" type="boolean">
+            <type by_reference="false">boolean</type>
+          </tag>
+        </docblock>
+        <argument line="180">
+          <name>$root</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="180">
+          <name>$scanned_dir</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="180">
+          <name>$stub_file</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PharCompiler\Console" line="199" package="PharCompiler\Console;">
+        <name>error</name>
+        <full_name>error</full_name>
+        <docblock line="191">
+          <description>error</description>
+          <long-description></long-description>
+          <tag line="191" name="access" description="protected"/>
+          <tag line="191" name="param" description="error message" type="string" variable="$message">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="191" name="param" description="error number" type="int" variable="$errno">
+            <type by_reference="false">int</type>
+          </tag>
+          <tag line="191" name="return" description="Returns the error number" type="int">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+        <argument line="199">
+          <name>$message</name>
+          <default>''</default>
+          <type/>
+        </argument>
+        <argument line="199">
+          <name>$errno</name>
+          <default>1</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="PharCompiler\Console" line="216" package="PharCompiler\Console;">
+        <name>success</name>
+        <full_name>success</full_name>
+        <docblock line="210">
+          <description>success</description>
+          <long-description></long-description>
+          <tag line="210" name="access" description="protected"/>
+          <tag line="210" name="param" description="The success message" type="string" variable="$message">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="216">
+          <name>$message</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="PharCompiler\Console" line="231" package="PharCompiler\Console;">
+        <name>_scandir</name>
+        <full_name>_scandir</full_name>
+        <docblock line="224">
+          <description>_scandir</description>
+          <long-description></long-description>
+          <tag line="224" name="access" description="private"/>
+          <tag line="224" name="param" description="The path" type="string" variable="$path">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="224" name="return" description="$itms path with filename" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="231">
+          <name>$path</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+  </file>
+  <package name="Default" full_name="Default"/>
+  <package name="PharCompiler" full_name="PharCompiler">
+    <package name="Console;" full_name="PharCompiler\Console;"/>
+  </package>
+  <namespace name="PharCompiler" full_name="PharCompiler">
+    <namespace name="Console" full_name="PharCompiler\Console"/>
+  </namespace>
+  <marker count="0">todo</marker>
+  <marker count="0">fixme</marker>
+  <deprecated count="0"/>
+</project>
