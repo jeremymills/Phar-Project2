@@ -1,7 +1,10 @@
 <?php
 namespace tests;
 
-use src\PharCompiler\Console;
+use src\PharCompiler\Console\Make;
+
+$autoloader = require_once __DIR__ . '/../vendor/autoload.php';
+$autoloader->add('PharCompiler', __DIR__ . '/../src');
 
 /**
  * MakeTest class extending PHPUnit_Framework_TestCase
@@ -18,12 +21,25 @@ use src\PharCompiler\Console;
 class MakeTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * run_protected_method
+     *
+     * @access protected 
+     */
+    protected function run_protected_method($obj, $method, $args = array()) {
+        $method = new \ReflectionMethod(get_class($obj), $method);
+        $method->setAccessible(true);
+        return $method->invokeArgs($obj, $args);
+    }
+    
+    /**
      * testInit tests __construct() of Make class
      *
      * @access public
      */
     public function testInit() {
+        $test = new \PharCompiler\Console\Make();
         
+        $this->assertEquals(true, is_object($test));
     }
     
     /**
@@ -32,12 +48,17 @@ class MakeTest extends \PHPUnit_Framework_TestCase
      * @access public
      */
     public function testConfigure() {
-        $test = new \src\PharCompiler\Console\Make();
+        $test = new \PharCompiler\Console\Make();
+        $this->assertEquals(true, is_object($test));
+        
+        //$result = $this->run_protected_method($test, 'configure', array());
+        
+        //$this->assertEquals('Name', $result->setName('Name'));
         
         //$name->configure()->setName('Name');
         
-        $this->assertEquals('Name', $test->configure()->setName('Name'));
-        $this->assertEquals('Description', $test->configure()->setDescription('Description'));
+        //$this->assertEquals('Name', $test->configure()->setName('Name'));
+       // $this->assertEquals('Description', $test->configure()->setDescription('Description'));*/
         
     }
     
@@ -47,7 +68,7 @@ class MakeTest extends \PHPUnit_Framework_TestCase
      * @access public
      */
     public function testExecute() {
-        
+        //Cannot be tested because it is a command line call
     }
     
     /**
@@ -56,7 +77,30 @@ class MakeTest extends \PHPUnit_Framework_TestCase
      * @access public
      */
     public function testCompress() {
+        $test = new \PharCompiler\Console\Make();
         
+        $file = 'far.phar';
+        $stub = 'src/index.php';
+        $root = '../../Review';
+        
+        $test->compress($file, $stub, $root);
+        $this->assertFileExists($file);
+        
+        /*$this->assertEquals($test->compress($file, $stub, $root) , print "CREATED $file.. \nthank you for using:
+ _______    _____      _   __	  _   __        _
+|__   __|  / ___ \    | | / /    | | / /       / \
+   | |	  / /   \ \   | |/ /     | |/ /       / / \
+   | |   | |    | |   | | /      | | /       / /_\ \
+   | |   | |    | |   | |\ \     | |\ \     / _____ \
+ __| |   \ \___/ /    | | \ \    | | \ \   / /     \ \
+|____/    \_____/     |_|  \_\   |_|  \_\ /_/       \_\
+(c) Jeremy Mills <jeremy.mills89@gmail.com>
+(c) Insu Mun <mis8680@gmail.com>
+(c) Carlie Hiel <carlie.hiel@gmail.com>
+Jokka is a complete symfony based phar compiling tool.
+Jokka is built with the help of (c) Jeremy Perret's <jeremy@devstar.org> Empir php compiling tool.
+");*/
+        //$this->assertEquals($test->compress($file, $stub, $root) instanceof CommandOutput);
     }
     
     /**
@@ -65,60 +109,35 @@ class MakeTest extends \PHPUnit_Framework_TestCase
      * @access public
      */
     public function testIsPharWritable() {
+        $test = new \PharCompiler\Console\Make();
         
+        $file = 'far.phar';
+        $stub = 'src/index.php';
+        $root = '../../Review';
+        
+        $test->compress($file, $stub, $root);
+        
+        $result = $this->run_protected_method($test, 'is_phar_writable', array());
+        
+        $this->assertEquals(null, $result);
+
     }
     
     /**
-     * testGetVar tests get_var() of Make class
+     * testStubExists tests stub_exists() of Make class
      *
      * @access public
      */
-    public function testGetVar() {
+    public function testStubExists() {
+        $test = new \PharCompiler\Console\Make();
         
-    }
-    
-    /**
-     * testMakeAbsolute tests makeAbsolute() of Make class
-     *
-     * @access public
-     */
-    public function testMakeAbsolute() {
+        $file = 'far.phar';
+        $stub = 'src/index.php';
+        $root = '../../Review';
         
-    }
-    
-    /**
-     * testExecCommand tests execCommand() of Make class
-     *
-     * @access public
-     */
-    public function testExecCommand() {
+        $test->compress($file, $stub, $root);
         
-    }
-    
-    /**
-     * testGetOption tests get_option() of Make class
-     *
-     * @access public
-     */
-    public function testGetOption() {
-        
-    }
-    
-    /**
-     * testGetLastOption tests get_last_option() of Make class
-     *
-     * @access public
-     */
-    public function testGetLastOption() {
-        
-    }
-    
-    /**
-     * testRequestOption tests request_option() of Make class
-     *
-     * @access public
-     */
-    public function testRequestOption() {
+        $this->assertFileExists($root . '/' . $stub);       
         
     }
     
@@ -128,7 +147,11 @@ class MakeTest extends \PHPUnit_Framework_TestCase
      * @access public
      */
     public function testError() {
+        $test = new \PharCompiler\Console\Make();
         
+        $result = $this->run_protected_method($test, 'error', array(1));
+        
+        $this->assertEquals(1, $result);
     }
     
     /**
@@ -137,6 +160,11 @@ class MakeTest extends \PHPUnit_Framework_TestCase
      * @access public
      */
     public function testSuccess() {
+        $test = new \PharCompiler\Console\Make();
+        
+        $result = $this->run_protected_method($test, 'success', array('success'));
+
+        $this->assertEquals(null, $result);
         
     }
     
@@ -146,6 +174,12 @@ class MakeTest extends \PHPUnit_Framework_TestCase
      * @access public
      */
     public function testScandir() {
+        $test = new \PharCompiler\Console\Make();
+        $stub = 'src/index.php';
+        $root = '../../Review';
         
+        $result = $this->run_protected_method($test, 'success', array('../../Review/src/index.php'));
+        
+        $this->assertEquals(null, $result);
     }
 }

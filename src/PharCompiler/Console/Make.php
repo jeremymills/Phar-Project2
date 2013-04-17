@@ -47,15 +47,11 @@ class Make extends Command
      * execute
      *
      * @access protected
-     * @param
-     * @param
+     * @param InputInterface $input The input
+     * @param OutputInterface $output The output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
-    {
-	$output->writeln("\nThe phar_file name is ..." . $input->getArgument('phar_file'));
-	$output->writeln('The phar_stub name is ..."' . $input->getArgument('phar_stub') . '"');
-	$output->writeln('The root_app is ..."' . $input->getArgument('root_app') . '"');
-        
+    {   
 	$this->compress($input->getArgument('phar_file'), $input->getArgument('phar_stub'), $input->getArgument('root_app'));
         
         $output->writeln(PHP_EOL . PHP_EOL);
@@ -65,9 +61,9 @@ class Make extends Command
      * compress
      *
      * @access public
-     * @param
-     * @param
-     * @param
+     * @param string $file Name of file
+     * @param string $stub Name of stub file
+     * @param string $root Name of root
      */
     public function compress($file, $stub, $root)
     {
@@ -81,33 +77,18 @@ class Make extends Command
 	$stub_file = trim($stub);
 	//set the root app where phar will be created from
 	$root_app = $root;
-	//set the compression type
-	//$_compression = 'no';
-	//set the format to compress on (phar)
-	//$_format = 'phar';
 
+	//Check if the root_app actually exists
 	if (!file_exists($root_app)) {
 		return $this->error("Root dir of your app doesn't exist.");
 	}
-
-	/*if (!empty($_compression) && !in_array($_compression, $this->compression_types)) {
-		return $this->error("Unrecognized compression: $_compression");
-	}
-	if (!empty($_format) && !in_array($_format, $this->format_types)) {
-		return $this->error("Unrecognized format: $_format");
+	
+	//Check if the stub file actually exists
+	if (!$this->stub_exists($root_app,$this->_scandir($root_app),$stub_file)) {
+	    return $this->error("Stub file ".$stub_file." doesn't exist within ".$root_app);
 	}
 
-	if (!empty($_fexclude)) {
-		$_fexclude = $this->makeAbsolute($_fexclude);
-		if (!file_exists($_fexclude)) {
-			return $this->error("Exclude file: $_fexclude not found.");
-		}
-		$_fexclude = file_get_contents($_fexclude);
-	}
-
-	$shell_masks = explode('|', $_exclude);
-	$shell_masks = array_merge($shell_masks, explode("\n", $_fexclude));*/
-
+	//unlink previous phar if exists
 	//do not show error message when unlinking $phar
 	@unlink($phar);
 		
@@ -118,28 +99,27 @@ class Make extends Command
 	    
 	    echo "\nCompressing files into: ".$phar_name;
 	    echo "\nMaking babies.. \n===================\n";
-	
+	    
 	    $p->setStub("<?php Phar::mapPhar(); include 'phar://".$phar_name."/".$stub_file."'; __HALT_COMPILER(); ?>");
-
+	    
 	    $files = $this->_scandir($root_app);
 	    
 	    // counter variable to display the number of files that will be added
 	    $count = 0;
+	    
 	    foreach ($files as $file) {
 		$file_buff = $file;
 		$file = str_replace('\\', '/', $file);
 		$file = str_replace($root_app.'/', '', $file);
-
-		//if (!$this->_exclude($file, $shell_masks) && !$this->_exclude($file, array('*/'.$phar_name, $phar_name))) {
-		    $p[$file] = file_get_contents($file_buff);
-		    echo "adding $file ..\n";
-		    $count++;
-		//}
+		
+		$p[$file] = file_get_contents($file_buff);
+		echo "adding $file ..\n";
+		$count++;
 	    }
 
 	    echo "\nTotal: $count files added\n";
 	    
-	    return $this->success("CREATED $phar.. thank you for using:
+	    return $this->success("CREATED $phar.. \nthank you for using:
  _______    _____      _   __	  _   __        _
 |__   __|  / ___ \    | | / /    | | / /       / \
    | |	  / /   \ \   | |/ /     | |/ /       / / \
@@ -152,13 +132,7 @@ class Make extends Command
 (c) Carlie Hiel <carlie.hiel@gmail.com>
 Jokka is a complete symfony based phar compiling tool.
 Jokka is built with the help of (c) Jeremy Perret's <jeremy@devstar.org> Empir php compiling tool.
-phar.readonly must be set to 0 within your php.ini in order to run");
-	
-	    $phar_copy = $phar.'phar';
-	    @unlink($phar_copy);
-	    $p = $p->convertToExecutable(Phar::PHAR, Phar::NONE);
-	    $this->success("CREATE $phar_copy");
-	    @unlink($phar);
+");
 		
 	} catch (Exception $e) {
 		return $this->error($e->getMessage());
@@ -180,123 +154,32 @@ phar.readonly must be set to 0 within your php.ini in order to run");
     }
     
     /**
-     * get_var
+     * stub_exists
      *
      * @access private
-     * @param
-     * @return
+     * @param string $root Root path
+     * @param string $scanned_dir Directory being scanned/root
+     * @param string $stub_file File name
+     * @return boolean 
      */
-    private function get_var($var)
+    private function stub_exists($root, $scanned_dir, $stub_file)
     {
-	if (is_string($var)) {
-	    if (isset($this->$var)) {
-		return $this->$var;
+	foreach ($scanned_dir as $handle) {
+	    if ($root .'/'. $stub_file == $handle) {
+		return TRUE;
 	    }
-	} else {
-	    foreach (array_merge($this->compression_types, $this->format_types) as $v) {
-		if ($this->$v->int_value == $var) {
-		    return $this->$v;
-		}
-	    }
-	}
+	} 
+	return FALSE;
     }
     
-    /**
-     * makeAbsolute
-     *
-     * @access protected
-     * @param
-     * @return
-     */
-    protected function makeAbsolute($path = '')
-    {
-	$current = getcwd().'/';
-    	
-	if ($path === "" || $path === false) {
-	    $absolut_path = $current;
-	} elseif (substr($path, 0, 2) == './') {
-	    $absolut_path = $current.substr($path, 2);
-	} elseif (strpos($path, ':') === 1 || substr($path, 0, 2) == '\\\\' || substr($path, 0, 1) == '/') {
-	    $absolut_path = $path;
-	} else {
-	    $absolut_path = $current.$path;
-	}
-
-	$absolut_path = str_replace('\\', '/', $absolut_path);
-	$absolut_path = rtrim($absolut_path, '/');
-
-	return $absolut_path;
-    }
-    
-    /**
-     * execCommand
-     *
-     * @access protected
-     * @return
-     */
-    protected function execCommand()
-    {
-	if (isset($this->commands[$this->command])) {
-            $method = $this->commands[$this->command];
-	    $rcode = $this->$method();
-	} else {
-	    $rcode = $this->error("Command <$this->command> doesn't exist. Try -h");
-        }
-	$this->
-        return ($rcode == null) ? 0 : $rcode;
-    }
-
-    /**
-     *
-     */
-    protected function get_option($no)
-    {
-    	if (isset($this->options[$no])) {
-    	    return $this->options[$no];
-    	}
-    	return null;
-    }
-
-    /**
-     * get_last_option
-     *
-     * @access protected
-     * @param
-     * @return
-     */
-    protected function get_last_option($opt)
-    {
-    	foreach ($this->options as $option) {
-    	    if (strpos($option, "--$opt=") !== false) {
-    		return trim(end(explode('=', $option)), '"');
-    	    }
-    	}
-    	return null;
-    }
-    
-    /**
-     * request_option
-     *
-     * @access protected
-     * @param
-     * @param
-     * @return
-     */
-    protected function request_option($no, $name)
-    {
-    	if ($this->get_option($no) == null) {
-    	    exit($this->error("Param $name is required. Try -h"));
-    	}
-	return $this->get_option($no);
-    }
     
     /**
      * error
      *
      * @access protected
-     * @param
-     * @param
-     * @return
+     * @param string $message error message
+     * @param int $errno error number
+     * @return int Returns the error number
      */
     protected function error($message = '', $errno = 1)
     {
@@ -313,7 +196,7 @@ phar.readonly must be set to 0 within your php.ini in order to run");
      * success
      *
      * @access protected
-     * @param
+     * @param string $message The success message
      */
     protected function success($message)
     {
@@ -327,8 +210,8 @@ phar.readonly must be set to 0 within your php.ini in order to run");
      * _scandir
      *
      * @access private
-     * @param
-     * @return 
+     * @param string $path The path
+     * @return array $itms path with filename
      */
     private function _scandir($path)
     {

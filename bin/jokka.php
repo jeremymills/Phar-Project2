@@ -1,10 +1,10 @@
 <?php
 
 //include the composer autoloader
-$autoloader = require_once __DIR__ . '/vendor/autoload.php';
+$autoloader = require_once __DIR__ . '/../vendor/autoload.php';
 
 //add 'our' source directory to the autoloader
-$autoloader->add('PharCompiler', 'src');
+$autoloader->add('PharCompiler', __DIR__ . '/../src');
 
 //create a new applocation instance
 $application = new Symfony\Component\Console\Application(
