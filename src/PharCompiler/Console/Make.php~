@@ -1,8 +1,5 @@
 <?php
 
-/**
- * namespace
- */
 namespace PharCompiler\Console;
 
 use Symfony\Component\Console\Command\Command;
