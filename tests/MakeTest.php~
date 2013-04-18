@@ -1,7 +1,4 @@
 <?php
-/**
- * namespace
- */
 namespace tests;
 
 use src\PharCompiler\Console\Make;
